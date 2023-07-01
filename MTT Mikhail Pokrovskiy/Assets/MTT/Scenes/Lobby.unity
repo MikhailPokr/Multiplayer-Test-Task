@@ -228,7 +228,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CreateRoomButton: 1
-  EventTrigger: {fileID: 0}
 --- !u!1 &129255539
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,7 +293,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1496123348}
+  m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &260682722
@@ -640,7 +639,7 @@ GameObject:
   - component: {fileID: 1049901742}
   - component: {fileID: 1049901741}
   - component: {fileID: 1049901743}
-  - component: {fileID: 1049901744}
+  - component: {fileID: 1049901745}
   m_Layer: 5
   m_Name: Start
   m_TagString: Untagged
@@ -723,12 +722,13 @@ MonoBehaviour:
   _noNameText: "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043D\u0430\u0437\u0432\u0430\u043D\u0438\u0435"
   _warmingText: "\u041A\u043E\u043C\u043D\u0430\u0442\u0430 \u043D\u0435 \u043D\u0430\u0439\u0434\u0435\u043D\u0430
     :("
-  _warming2Text: 
+  _warming2Text: "\u0422\u0430\u043A\u0430\u044F \u043A\u043E\u043C\u043D\u0430\u0442\u0430
+    \u0443\u0436\u0435 \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442!"
   _joinText: "\u041F\u0440\u0438\u0441\u043E\u0435\u0434\u0438\u043D\u0438\u0442\u044C\u0441\u044F!"
   _createText: "\u0421\u043E\u0437\u0434\u0430\u0442\u044C!"
   _text: {fileID: 1770094319}
   _loading: {fileID: 1308623392}
---- !u!114 &1049901744
+--- !u!114 &1049901745
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -737,16 +737,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1049901739}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f76f7d9eee183a48b36a93a96f94cc0, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _noNameText: 
-  _warmingText: 
-  _warming2Text: 
-  _joinText: 
-  _createText: 
-  _text: {fileID: 0}
-  _loading: {fileID: 0}
+  m_Delegates: []
 --- !u!1 &1124888301
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,7 +1073,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CreateRoomButton: 0
-  EventTrigger: {fileID: 0}
 --- !u!1 &1308623389
 GameObject:
   m_ObjectHideFlags: 0
@@ -1177,59 +1170,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1308623389}
   m_CullTransparentMesh: 1
---- !u!1 &1496123346
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1496123348}
-  - component: {fileID: 1496123347}
-  m_Layer: 0
-  m_Name: Lobby
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1496123347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1496123346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc1a5bbc49f83df4f9af45729ea94258, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _roomName: {fileID: 1124888303}
-  _modeJoinButton: {fileID: 1144801365}
-  _modeCreateButton: {fileID: 107537819}
-  _mark: {fileID: 520073014}
-  _startButton: {fileID: 1049901743}
-  _roomCount: {fileID: 2050292365}
---- !u!4 &1496123348
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1496123346}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1992146221}
-  - {fileID: 1522069220}
-  - {fileID: 129255542}
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1505945565
 GameObject:
   m_ObjectHideFlags: 0
@@ -1339,6 +1279,7 @@ GameObject:
   - component: {fileID: 1522069219}
   - component: {fileID: 1522069218}
   - component: {fileID: 1522069217}
+  - component: {fileID: 1522069221}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1426,7 +1367,7 @@ RectTransform:
   - {fileID: 1124888302}
   - {fileID: 1049901740}
   - {fileID: 2050292364}
-  m_Father: {fileID: 1496123348}
+  m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1434,6 +1375,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1522069221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1522069216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc1a5bbc49f83df4f9af45729ea94258, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _roomName: {fileID: 1124888303}
+  _modeJoinButton: {fileID: 1144801365}
+  _modeCreateButton: {fileID: 107537819}
+  _mark: {fileID: 520073014}
+  _startButton: {fileID: 1049901743}
+  _roomCount: {fileID: 2050292365}
 --- !u!1 &1683116177
 GameObject:
   m_ObjectHideFlags: 0
@@ -1715,7 +1674,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1496123348}
+  m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2050292363

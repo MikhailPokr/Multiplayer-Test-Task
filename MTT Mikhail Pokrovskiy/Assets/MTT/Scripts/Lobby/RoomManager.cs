@@ -30,16 +30,20 @@ namespace MTT
 
         private bool _createMode = true;
         private bool _avalible = false;
+        TypedLobby _lobby;
         private List<RoomInfo> _rooms;
 
 
         private void Start()
         {
-            PhotonNetwork.JoinLobby();
+            _lobby = new TypedLobby("DefaultLobby", LobbyType.Default);
+            LoadBalancingClient client = PhotonNetwork.NetworkingClient;
+            client.OpJoinLobby(_lobby);
 
             _roomName.onSubmit.AddListener(OnRoomNameChanged);
             _modeCreateButton.Click += OnModeButtonClick;
             _modeJoinButton.Click += OnModeButtonClick;
+            _startButton.Click += OnStartButtonClick;
         }
 
         private void OnRoomNameChanged(string name)
@@ -52,7 +56,7 @@ namespace MTT
             _createMode = itsCreateButton;
             OnRoomNameChanged(_roomName.text);
             _mark.ChangePosition(itsCreateButton);
-            _startButton.Click += OnStartButtonClick;
+            
         }
 
         private void OnStartButtonClick()
@@ -63,12 +67,17 @@ namespace MTT
             {
                 RoomOptions roomOptions = new RoomOptions();
                 roomOptions.MaxPlayers = 4;
-                PhotonNetwork.CreateRoom(_roomName.text, roomOptions);
+                PhotonNetwork.CreateRoom(_roomName.text, roomOptions, _lobby);
             }
             else
             {
                 PhotonNetwork.JoinRoom(_roomName.text);
             }
+        }
+
+        public override void OnJoinedLobby()
+        {
+            print(PhotonNetwork.CurrentLobby.Name);
         }
 
         private bool CheckRooms()
@@ -120,7 +129,7 @@ namespace MTT
 
         public override void OnJoinedRoom()
         {
-            SceneManager.LoadScene("Game");
+            PhotonNetwork.LoadLevel("Game");
         }
     }
 }
