@@ -22,7 +22,7 @@ namespace MTT
                 new Vector2(Random.Range(_playArea.xMin, _playArea.xMax),
                 Random.Range(_playArea.yMin, _playArea.yMax)),
                 Quaternion.identity);
-            player.transform.SetParent(transform, true);
+            player.transform.parent = transform;
 
             _players.Add(player);
         }

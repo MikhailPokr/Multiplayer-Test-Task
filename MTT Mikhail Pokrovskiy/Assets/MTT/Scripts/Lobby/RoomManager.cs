@@ -127,6 +127,11 @@ namespace MTT
             _avalible = CheckRooms();
         }
 
+        public override void OnConnectedToMaster()
+        {
+            print("&");
+        }
+
         public override void OnJoinedRoom()
         {
             PhotonNetwork.LoadLevel("Game");
