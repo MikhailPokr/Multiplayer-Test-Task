@@ -1,39 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace MTT
 {
-    internal class LevelGenerator : MonoBehaviour
+    [Singleton]
+    internal class LevelManager : MonoBehaviour, ISingleton
     {
-        [SerializeField] private GameObject _cornerTopLeft;
-        [SerializeField] private GameObject _cornerBottomRight;
+        [SerializeField] private GamePointsManager _gamePointManager;
+        [Space]
+        [SerializeField] private CanvasPointSync _cornerTopLeft;
+        [SerializeField] private CanvasPointSync _cornerBottomRight;
         [Space]
         [SerializeField] private string _pattern;
         [Space]
         [SerializeField] private Vector2Int _size;
         [Space]
-        [SerializeField] private MovePoint _pointPrefab;
-        [SerializeField] private GameObject _pointParent;
-
-        private List<GameObject> _points;
-        public List<GameObject> Points => _points;
+        [SerializeField] private GamePoint _pointPrefab;
+        [SerializeField] private Transform _pointParent;
 
         private void Awake()
         {
-            _points = new();
+            PointsSync();
 
-            bool[,] map = GetMap();
-            Vector2[,] pos = GetPointsPos();
+            List<GamePoint> points = GenerateLevel();
 
-            for (int i = 0; i < _size.x; i++)
-                for (int j = 0; j < _size.y; j++)
-                {
-                    _pointPrefab.Instantiate(pos[i, j], new Vector2Int(i, j), _pointParent.transform, map[i, j]);
-                }
-
+            _gamePointManager.SetPoints(points, _size);
         }
 
         private bool[,] GetMap()
@@ -65,7 +60,7 @@ namespace MTT
             int patternRepeatCurrent = -1;
             for (int i = 0; i < length; i++)
             {
-                map[i] = true;
+                map[i] = false;
 
                 if (patternIndex >= pattern.Length)
                 {
@@ -110,7 +105,7 @@ namespace MTT
                 }
                 if (patternLengthCurrent == 0)
                 {
-                    map[i] = false;
+                    map[i] = true;
                     if (patternRepeatCurrent > 0)
                     {
                         patternRepeatCurrent--;
@@ -152,23 +147,38 @@ namespace MTT
             return mapResult;
         }
 
-        private Vector2[,] GetPointsPos()
+        private List<GamePoint> GenerateLevel()
         {
-            Vector2 gaps = GetGaps();
-            Vector2[,] result = new Vector2[_size.x, _size.y];
+            List<GamePoint> points = new();
 
-            Gizmos.color = new Color(1, 0, 0, 0.5f);
+            bool[,] map = GetMap();
+
             for (int i = 0; i < _size.x; i++)
                 for (int j = 0; j < _size.y; j++)
                 {
-                    Vector2 pos = new Vector2(_cornerTopLeft.transform.position.x + i * gaps.x + gaps.x / 2,
-                             _cornerTopLeft.transform.position.y - j * gaps.y - gaps.y / 2);
-                    result[i, j] = pos;
+                    GamePoint point = Instantiate(_pointPrefab, GetPointPos(i, j), Quaternion.identity, _pointParent);
+                    point.SetData(new() { IndexX = i, IndexY = j, Block = map[i, j], PlayerIndex = -1, Projectile = false, ProjectileIndex = -1});
+                    points.Add(point);
                 }
 
-            return result;
+            return points;
         }
-        private Vector2 GetGaps()
+
+        public void PointsSync()
+        {
+            _cornerTopLeft.Sync();
+            _cornerBottomRight.Sync();
+        }
+        private Vector2 GetPointPos(int i, int j)
+        {
+            Vector2 gaps = GetGaps();
+
+            Vector2 pos = new Vector2(_cornerTopLeft.transform.position.x + i * gaps.x + gaps.x / 2,
+                             _cornerTopLeft.transform.position.y - j * gaps.y - gaps.y / 2);
+
+            return pos;
+        }
+        public Vector2 GetGaps()
         {
             if (_cornerTopLeft == null || _cornerBottomRight == null)
                 return Vector2.zero;
@@ -182,22 +192,21 @@ namespace MTT
 #if UNITY_EDITOR
         [Space]
         [SerializeField] private float _gizmosRadius;
-        private void OnDrawGizmosSelected()
+        private void OnDrawGizmos()
         {
             if (_cornerTopLeft == null || _cornerBottomRight == null)
                 return;
 
             bool[,] map = GetMap();
-            Vector2[,] pos = GetPointsPos();
         
             Gizmos.color = new Color(1, 0, 0, 0.5f);
             for (int i = 0; i < _size.x; i++)
                 for (int j = 0; j < _size.y; j++)
                 {
-                    if (map[i, j])
-                        Gizmos.DrawWireSphere(pos[i, j], _gizmosRadius);
+                    if (!map[i, j])
+                        Gizmos.DrawWireSphere(GetPointPos(i, j), _gizmosRadius);
                     else
-                        Gizmos.DrawSphere(pos[i, j], _gizmosRadius);
+                        Gizmos.DrawSphere(GetPointPos(i, j), _gizmosRadius);
                 }
         }
 #endif
