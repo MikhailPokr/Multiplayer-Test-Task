@@ -28,6 +28,8 @@ namespace MTT
 
         private bool _findPoints;
 
+        private bool _gameStarted = false;
+
 
         private void FixedUpdate()
         {
@@ -70,35 +72,6 @@ namespace MTT
                             playerIndex = j;
                         }
                     }
-
-
-
-
-
-                    /*if (_gamePoints[j] == null)
-                        continue;
-                    
-                    if (j == _gamePoints[j][i].PlayerIndex && j != _player.Index)
-                    {
-                        playerIndex = _gamePoints[j][i].PlayerIndex;
-                        break;
-                    }
-
-                    if (_gamePoints[j][i].PlayerIndex == _player.Index && _gamePoints[j][i].Index != _lastPoint.Index )
-                    {
-                        playerIndex = -1;
-                    }
-                    else if (_gamePoints[j][i].Index == _lastPoint.Index)
-                    {
-                        playerIndex = _player.Index;
-                        break;
-                    }
-                    else
-                    {
-                        playerIndex = _gamePoints[j][i].PlayerIndex;
-                        if (playerIndex != -1)
-                            break;
-                    }*/
                 }
                 for (int j = 0; j < 4; j++)
                 {
@@ -155,6 +128,8 @@ namespace MTT
 
         public void MoveToken(Player player, Vector2Int deltaPos)
         {
+            if (!_gameStarted)
+                return;
             GamePoint point = _gamePoints[player.Index].Find(x => x.PlayerIndex == player.Index);
             Vector2Int newPos = point.Index + deltaPos;
             GamePoint newPoint = _gamePoints[player.Index].Find(x => x.Index == newPos);
@@ -178,6 +153,38 @@ namespace MTT
 
             print($"Создан токен персонажа {player.Index} в точке {point.Index.x}x{point.Index.y}");
             _lastPoint = point;
+        }
+
+        public bool CheckTokens()
+        {
+            int players = PhotonNetwork.PlayerList.Length;
+            for (int i = 0; i < players; i++)
+            {
+                if (_gamePoints[i] == null)
+                    return false;
+                if (_gamePoints[i].Contains(null))
+                {
+                    return false;
+                }
+                try
+                {
+                    if (_gamePoints[i].Find(x => x.PlayerIndex != -1) == null)
+                    {
+                        return false;
+                    }
+                }
+                catch
+                {
+
+                }
+                
+            }
+            return true;
+        }
+
+        public void StartGame()
+        {
+            _gameStarted = true;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace MTT
         
         [SerializeField] private Player _playerPrefab;
 
-        public bool IsGameReady(bool owner)
+        public bool IsPlayersReady(bool owner)
         {
             Photon.Realtime.Player[] list = PhotonNetwork.PlayerList;
             if (list.Length >= 2 && owner)
@@ -23,21 +23,7 @@ namespace MTT
             return false;
         }
 
-        public void StartGame()
-        {
-            /*Photon.Realtime.Player[] list = PhotonNetwork.PlayerList;
-            for (int i = 0; i < list.Length; i++) 
-            {
-                if (list[i].IsLocal)
-                {
-                    CreatePlayer();
-                }
-            }*/
-
-            CreatePlayer();
-        }
-
-        private void CreatePlayer()
+        public void CreatePlayer()
         {
             Player player = PhotonNetwork.Instantiate(_playerPrefab.name, Vector2.zero, Quaternion.identity).GetComponent<Player>();
 
