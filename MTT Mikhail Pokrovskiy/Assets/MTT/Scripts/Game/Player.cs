@@ -10,36 +10,51 @@ namespace MTT
     {
         public PhotonView PhotonView;
         public Photon.Realtime.Player PhotonPlayer;
+        public int Index;
 
-        private void Start()
+        private GamePointsManager _manager;
+
+        public override void OnEnable()
         {
+            base.OnEnable();
+
             Singleton<Controls>.instance.Control += OnControl;
+            _manager = Singleton<GamePointsManager>.instance;
+
+            Index = PhotonNetwork.LocalPlayer.ActorNumber - 1;
         }
 
         private void OnControl(Photon.Realtime.Player player, ControlType control)
         {
-            switch (control)
+            if (PhotonPlayer == player)
             {
-                case ControlType.Up:
-                    {
-                        break;
-                    }
-                case ControlType.Down:
-                    {
-                        break;
-                    }
-                case ControlType.Left:
-                    {
-                        break;
-                    }
-                case ControlType.Right:
-                    {
-                        break;
-                    }
-                case ControlType.Shoot:
-                    {
-                        break;
-                    }
+                switch (control)
+                {
+                    case ControlType.Up:
+                        {
+                            _manager.MoveToken(this, new Vector2Int(0, -1));
+                            break;
+                        }
+                    case ControlType.Down:
+                        {
+                            _manager.MoveToken(this, new Vector2Int(0, 1));
+                            break;
+                        }
+                    case ControlType.Left:
+                        {
+                            _manager.MoveToken(this, new Vector2Int(-1, 0));
+                            break;
+                        }
+                    case ControlType.Right:
+                        {
+                            _manager.MoveToken(this, new Vector2Int(1, 0));
+                            break;
+                        }
+                    case ControlType.Shoot:
+                        {
+                            break;
+                        }
+                }
             }
         }
     }

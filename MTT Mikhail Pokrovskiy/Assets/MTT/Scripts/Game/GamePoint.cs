@@ -1,8 +1,11 @@
 using Photon.Pun;
+using Photon.Pun.Demo.Procedural;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.AdaptivePerformance.Provider.AdaptivePerformanceSubsystemDescriptor;
 
 namespace MTT
 {
@@ -17,7 +20,11 @@ namespace MTT
     }
     internal class GamePoint : MonoBehaviour, IPunObservable
     {
+        [SerializeField] public PhotonView PhotonView;
         [SerializeField] private SpriteRenderer _spriteRenderer;
+
+        public delegate void ChangeHandler(GamePointInfo data, int view);
+        public static event ChangeHandler Change;
 
         private Vector2Int _index;
         private bool _block;
@@ -25,21 +32,73 @@ namespace MTT
         private bool _projectile;
         private int _projectileIndex;
 
+        public Vector2Int Index => _index;
+        public int PlayerIndex => _playerIndex;
+        public bool Free => !_block && _playerIndex == -1;
+
+        private void OnEnable()
+        {
+            //Change += OnChange;
+        }
+
+        /*private void OnChange(GamePointInfo data, int view)
+        {
+            if (_photonView.AmOwner)
+            {
+                if (data.IndexX != _index.x || data.IndexY != _index.y)
+                    return;
+                if (view.ToString().StartsWith("0") || view == _photonView.ViewID)
+                    return;
+
+                SetData(data);
+            }
+        }*/
+
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
-            print("Синхронизация");
             if (stream.IsWriting)
             {
-                stream.SendNext(GetData());
+                GamePointInfo pointInfo = GetData();
+
+                stream.SendNext(pointInfo.IndexX);
+                stream.SendNext(pointInfo.IndexY);
+                stream.SendNext(pointInfo.Block);
+                stream.SendNext(pointInfo.PlayerIndex);
+                stream.SendNext(pointInfo.Projectile);
+                stream.SendNext(pointInfo.ProjectileIndex);
             }
             else
             {
-                SetData((GamePointInfo)stream.ReceiveNext());
+                GamePointInfo pointInfo = new GamePointInfo
+                {
+                    IndexX = (int)stream.ReceiveNext(),
+                    IndexY = (int)stream.ReceiveNext(),
+                    Block = (bool)stream.ReceiveNext(),
+                    PlayerIndex = (int)stream.ReceiveNext(),
+                    Projectile = (bool)stream.ReceiveNext(),
+                    ProjectileIndex = (int)stream.ReceiveNext()
+                };
+
+                GamePointInfo currentData = GetData();
+
+                if (pointInfo.IndexX == currentData.IndexX &&
+                    pointInfo.IndexY == currentData.IndexY &&
+                    pointInfo.Block == currentData.Block &&
+                    pointInfo.PlayerIndex == currentData.PlayerIndex &&
+                    pointInfo.Projectile == currentData.Projectile &&
+                    pointInfo.ProjectileIndex == currentData.ProjectileIndex)
+                    return;
+
+                SetData(pointInfo);
+                Change?.Invoke(pointInfo, PhotonView.ViewID);
             }
         }
 
         private void UpdateView()
         {
+            if (!_spriteRenderer || _spriteRenderer.color.a == 0)
+                return;
+
             if (_block)
             {
                 _spriteRenderer.color = Color.black;
@@ -94,7 +153,16 @@ namespace MTT
                             _spriteRenderer.color = Singleton<GamePointsManager>.instance.Color3;
                             break;
                         }
+                    default:
+                        {
+                            break;
+                        }
                 }
+            }
+            else
+            {
+                if (!_projectile && !_block)
+                    _spriteRenderer.color = Color.white;                
             }
         }
 
@@ -102,6 +170,11 @@ namespace MTT
         {
             _playerIndex = player;
             UpdateView();
+        }
+
+        public void Enable()
+        {
+            _spriteRenderer.color = new Color(1, 1, 1, 1);
         }
 
         public GamePointInfo GetData() => new GamePointInfo()
@@ -114,7 +187,6 @@ namespace MTT
             ProjectileIndex = _projectileIndex
         };
 
-
         public void SetData(GamePointInfo info)
         {
             _index = new Vector2Int(info.IndexX, info.IndexY);
@@ -122,6 +194,7 @@ namespace MTT
             _playerIndex = info.PlayerIndex;
             _projectile = info.Projectile;
             _projectileIndex = info.ProjectileIndex;
+
             UpdateView();
         }
     }

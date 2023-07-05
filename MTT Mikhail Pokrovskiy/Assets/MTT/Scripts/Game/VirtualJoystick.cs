@@ -7,17 +7,9 @@ namespace MTT
 {
     internal class VirtualJoystick : MonoBehaviour
     {
-        [SerializeField] List<UIJoystickPart> _parts;
+        public float Cooldown;
 
-        private void Awake()
-        {
-            foreach (UIJoystickPart part in _parts) 
-            {
-                part.ButtonPress += OnButtonPress;
-            }
-        }
-
-        private void OnButtonPress(ControlType control)
+        public void Press(ControlType control)
         {
             Singleton<Controls>.instance.TakeAction(control);
         }

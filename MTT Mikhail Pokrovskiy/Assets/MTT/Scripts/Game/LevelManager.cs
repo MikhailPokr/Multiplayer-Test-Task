@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +23,27 @@ namespace MTT
         [SerializeField] private GamePoint _pointPrefab;
         [SerializeField] private Transform _pointParent;
 
+        public delegate void EndGenerationHendler(List<GamePoint> points, Vector2Int size);
+        public static event EndGenerationHendler EndGeneration;
+
         private void Awake()
         {
             PointsSync();
 
             List<GamePoint> points = GenerateLevel();
 
-            _gamePointManager.SetPoints(points, _size);
+            //EndGeneration?.Invoke(points, _size);
+
+            if (PhotonNetwork.LocalPlayer.ActorNumber != 1)
+            {
+                _gamePointManager.SetPoints(_size);
+            }
+            else
+            {
+                _gamePointManager.SetNewPoints(points, _size);
+            }
+
+            
         }
 
         private bool[,] GetMap()
@@ -156,7 +171,8 @@ namespace MTT
             for (int i = 0; i < _size.x; i++)
                 for (int j = 0; j < _size.y; j++)
                 {
-                    GamePoint point = Instantiate(_pointPrefab, GetPointPos(i, j), Quaternion.identity, _pointParent);
+                    GamePoint point = PhotonNetwork.Instantiate(_pointPrefab.name, GetPointPos(i, j), Quaternion.identity).GetComponent<GamePoint>();
+                    point.Enable();
                     point.SetData(new() { IndexX = i, IndexY = j, Block = map[i, j], PlayerIndex = -1, Projectile = false, ProjectileIndex = -1});
                     points.Add(point);
                 }

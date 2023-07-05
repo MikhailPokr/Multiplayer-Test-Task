@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2db25fe63cf14074d93829d7cee964c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PhotonView: {fileID: -1430539038341271395}
   _spriteRenderer: {fileID: 6837997457667741655}
 --- !u!114 &-1430539038341271395
 MonoBehaviour:
@@ -65,7 +66,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: -2826111600205190481}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -143,7 +145,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: a3227c7a8d4f09542acec49b87620bff, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

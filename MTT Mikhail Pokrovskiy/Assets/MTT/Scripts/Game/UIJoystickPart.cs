@@ -8,19 +8,16 @@ namespace MTT
 {
     internal class UIJoystickPart : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        public delegate void ButtonPressHandler(ControlType control);
-        public event ButtonPressHandler ButtonPress;
+        [SerializeField] private VirtualJoystick _joystick;
 
         private bool _pressed;
 
         [SerializeField] private ControlType _control;
 
         private float _timer;
-        [SerializeField] private float _cooldown;
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            _timer = _cooldown;
             _pressed = true;
         }
 
@@ -31,12 +28,12 @@ namespace MTT
 
         private void Update()
         {
+            _timer += Time.deltaTime;
             if (_pressed)
             {
-                _timer += Time.deltaTime;
-                if (_timer > _cooldown)
+                if (_timer > _joystick.Cooldown)
                 {
-                    ButtonPress?.Invoke(_control);
+                    _joystick.Press(_control);
                     _timer = 0;
                 }
             }
