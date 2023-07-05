@@ -1,9 +1,7 @@
 using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace MTT
@@ -125,11 +123,6 @@ namespace MTT
             _roomCount.text = $"Сейчас открыто комнат: {roomList.Count}";
 
             _avalible = CheckRooms();
-        }
-
-        public override void OnConnectedToMaster()
-        {
-            print("&");
         }
 
         public override void OnJoinedRoom()

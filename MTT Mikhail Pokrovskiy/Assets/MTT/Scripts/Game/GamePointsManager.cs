@@ -1,6 +1,4 @@
 using Photon.Pun;
-using Photon.Realtime;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -101,8 +99,6 @@ namespace MTT
                     SetNewPoints(newPoints, size);
                 }
             }
-
-            print($"{_gamePoints.ToList().FindAll(x => x != null).Count}");
         }
         public void SetPoints(Vector2Int size)
         {

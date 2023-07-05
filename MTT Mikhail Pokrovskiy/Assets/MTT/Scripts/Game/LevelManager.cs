@@ -1,10 +1,7 @@
 using Photon.Pun;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace MTT
 {
@@ -23,16 +20,11 @@ namespace MTT
         [SerializeField] private GamePoint _pointPrefab;
         [SerializeField] private Transform _pointParent;
 
-        public delegate void EndGenerationHendler(List<GamePoint> points, Vector2Int size);
-        public static event EndGenerationHendler EndGeneration;
-
         private void Awake()
         {
             PointsSync();
 
             List<GamePoint> points = GenerateLevel();
-
-            //EndGeneration?.Invoke(points, _size);
 
             if (PhotonNetwork.LocalPlayer.ActorNumber != 1)
             {

@@ -1,11 +1,6 @@
 using Photon.Pun;
-using Photon.Pun.Demo.Procedural;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.AdaptivePerformance.Provider.AdaptivePerformanceSubsystemDescriptor;
 
 namespace MTT
 {
@@ -23,9 +18,6 @@ namespace MTT
         [SerializeField] public PhotonView PhotonView;
         [SerializeField] private SpriteRenderer _spriteRenderer;
 
-        public delegate void ChangeHandler(GamePointInfo data, int view);
-        public static event ChangeHandler Change;
-
         private Vector2Int _index;
         private bool _block;
         private int _playerIndex;
@@ -35,24 +27,6 @@ namespace MTT
         public Vector2Int Index => _index;
         public int PlayerIndex => _playerIndex;
         public bool Free => !_block && _playerIndex == -1;
-
-        private void OnEnable()
-        {
-            //Change += OnChange;
-        }
-
-        /*private void OnChange(GamePointInfo data, int view)
-        {
-            if (_photonView.AmOwner)
-            {
-                if (data.IndexX != _index.x || data.IndexY != _index.y)
-                    return;
-                if (view.ToString().StartsWith("0") || view == _photonView.ViewID)
-                    return;
-
-                SetData(data);
-            }
-        }*/
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
@@ -90,7 +64,6 @@ namespace MTT
                     return;
 
                 SetData(pointInfo);
-                Change?.Invoke(pointInfo, PhotonView.ViewID);
             }
         }
 

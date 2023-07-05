@@ -62,7 +62,6 @@ namespace MTT
             {
                 stream.SendNext(_playersReady);
                 stream.SendNext(_tokenCreated);
-                print($"Отправлено: {_playersReady};{_tokenCreated}");
                 if (_playersReady && !_playerCreated)
                 {
                     //поменять экран, но пока
@@ -83,7 +82,6 @@ namespace MTT
             {
                 _playersReady = (bool)stream.ReceiveNext();
                 bool otherTokensCreated = (bool)stream.ReceiveNext();
-                print($"Полчучено: {_playersReady};{otherTokensCreated}");
 
                 if (_playersReady && !_playerCreated)
                 {
